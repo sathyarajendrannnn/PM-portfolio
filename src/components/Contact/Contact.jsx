@@ -26,16 +26,42 @@ const Contact = () => {
     if (errors[e.target.name]) setErrors({ ...errors, [e.target.name]: '' });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setSending(true);
-    setTimeout(() => {
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          // TODO: Replace with your actual Web3Forms access key
+          access_key: "c19ec636-27c1-4933-8272-027da743e68f", 
+          ...form
+        }),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setSending(false);
+        setSent(true);
+        setForm({ name: '', email: '', subject: '', message: '' });
+        setTimeout(() => setSent(false), 6000);
+      } else {
+        console.error("Form submission failed:", result);
+        setSending(false);
+        alert("Failed to send message. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
       setSending(false);
-      setSent(true);
-      setForm({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setSent(false), 6000);
-    }, 1600);
+      alert("An error occurred. Please try again later.");
+    }
   };
 
   const inputCls = (field) =>

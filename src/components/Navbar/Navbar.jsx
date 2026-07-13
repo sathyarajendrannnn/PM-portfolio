@@ -90,13 +90,7 @@ const Navbar = ({ darkMode, setDarkMode }) => {
               {darkMode ? <FiSun className="w-4 h-4" /> : <FiMoon className="w-4 h-4" />}
             </button>
 
-            <a
-              href={portfolioData.personalInfo.resumeUrl}
-              className="hidden sm:flex btn-gradient text-xs px-4 py-2 rounded-lg"
-            >
-              <FiDownload className="w-3.5 h-3.5" />
-              Resume
-            </a>
+
 
             <button
               onClick={() => setOpen(!open)}
